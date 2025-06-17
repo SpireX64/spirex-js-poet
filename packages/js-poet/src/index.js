@@ -1,5 +1,33 @@
-export class Module {
-    #constants = new Set();
+var ConstantDeclarationPrototype = Object.freeze({
+    decl: "const",
+    valueOf() { return this.value },
+    // istanbul ignore next
+    toString() { return `const{${this.name} = ${JSON.stringify(this.value)}}` },
+});
 
-    get constants() { return Array.from(this.#constants); }
+export class Module {
+    #constants = [];
+
+    get constants() {
+        return Array.from(this.#constants);
+    }
+
+    constant(name, value) {
+        this.#constants.push(
+            Object.freeze(
+                Object.setPrototypeOf(
+                    {
+                        name,
+                        value,
+                    },
+                    ConstantDeclarationPrototype,
+                ),
+            ),
+        );
+        return this;
+    }
+
+    refConstant(name) {
+        return this.#constants.find((it) => it.name === name) || null;
+    }
 }
