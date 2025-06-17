@@ -7,6 +7,9 @@ var ConstantDeclarationPrototype = Object.freeze({
     toString() {
         return `const{${this.name} = ${JSON.stringify(this.value)}}`;
     },
+    generateJS() {
+        return `var ${this.name} = ${JSON.stringify(this.value)};\n`
+    },
 });
 
 export class Module {
@@ -38,7 +41,7 @@ export class Module {
     generateJS() {
         var cb = [];
         this.#constants.forEach((c) => {
-            cb.push(`var ${c.name} = ${JSON.stringify(c.value)};\n`);
+            cb.push(c.generateJS());
         });
         return cb.join("");
     }
