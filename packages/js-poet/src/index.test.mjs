@@ -9,8 +9,12 @@ describe("JSPoet", () => {
                 var module = new Module()
 
                 // Assert ---------
-                // Constructor returns expected object
+                // 1. Constructor returns expected object
                 expect(module).toBeInstanceOf(Module);
+
+                // 2. Has empty list of constants
+                expect(module.constants).instanceOf(Array);
+                expect(module.constants).is.empty;
             })
         })
     })
