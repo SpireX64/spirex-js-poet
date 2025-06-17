@@ -33,10 +33,14 @@ describe("JSPoet", () => {
             test("WHEN: Generate JS code with constants", () => {
                 // Arrange -------
                 var expectedCode =
-                    'var foo = 42;\nvar bar = "hello";\nvar baz = {"name":"John"};\nvar qwe = undefined;\n';
+                    "export const foo = 42;\n" +
+                    'var bar = "hello";\n' +
+                    'const baz = { name: "John" };\n' +
+                    "const qwe = undefined;\n";
+
                 var module = new Module()
-                    .constant("foo", 42)
-                    .constant("bar", "hello")
+                    .constant("foo", 42, { export: true })
+                    .constant("bar", "hello", { kind: "var" })
                     .constant("baz", { name: "John" })
                     .constant("qwe", undefined);
 
@@ -86,7 +90,7 @@ describe("JSPoet", () => {
             // 1. 'refConstant' returns constant declaration object
             expect(constant).instanceOf(Object);
             expect(constant).is.frozen; // is immutable
-            expect(constant.decl).toBe("const"); // is constant declaration
+            expect(constant.elementType).toBe("const"); // is constant declaration
             expect(constant.name).toBe(expectedConstantName);
             expect(constant.value).toBe(expectedConstantValue);
             expect(constant.valueOf()).toBe(expectedConstantValue);
@@ -112,9 +116,8 @@ describe("JSPoet", () => {
         describe("Generate JS", () => {
             test("WHEN: Generate", () => {
                 // Arrange -------
-                var expectedCode = 'var foo = 42;\n';
-                var module = new Module()
-                    .constant("foo", 42);
+                var expectedCode = "const foo = 42;\n";
+                var module = new Module().constant("foo", 42);
 
                 // Act ----------
                 var ref = module.refConstant("foo");
@@ -122,7 +125,20 @@ describe("JSPoet", () => {
 
                 // Assert -------
                 expect(generatedCode).toBe(expectedCode);
-            })
-        })
+            });
+
+            test("WHEN: Generate exported", () => {
+                // Arrange --------
+                var expectedCode = "export const foo = 42;\n";
+                var module = new Module().constant("foo", 42, { export: true });
+
+                // Act -----------
+                var ref = module.refConstant("foo");
+                var generatedCode = ref.generateJS();
+
+                // Assert --------
+                expect(generatedCode).toBe(expectedCode);
+            });
+        });
     });
 });
