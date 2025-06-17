@@ -9,4 +9,6 @@ export class Module {
 
     public constant(name: string, value: unknown): Module
     public refConstant(name: string): TConstantDeclaration | null
+
+    public generateJS(): string;
 }

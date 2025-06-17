@@ -1,8 +1,12 @@
 var ConstantDeclarationPrototype = Object.freeze({
     decl: "const",
-    valueOf() { return this.value },
+    valueOf() {
+        return this.value;
+    },
     // istanbul ignore next
-    toString() { return `const{${this.name} = ${JSON.stringify(this.value)}}` },
+    toString() {
+        return `const{${this.name} = ${JSON.stringify(this.value)}}`;
+    },
 });
 
 export class Module {
@@ -29,5 +33,13 @@ export class Module {
 
     refConstant(name) {
         return this.#constants.find((it) => it.name === name) || null;
+    }
+
+    generateJS() {
+        var cb = [];
+        this.#constants.forEach((c) => {
+            cb.push(`var ${c.name} = ${JSON.stringify(c.value)};\n`);
+        });
+        return cb.join("");
     }
 }
