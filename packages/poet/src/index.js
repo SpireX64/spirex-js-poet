@@ -1,5 +1,5 @@
 var DEFAULT_INDENT = "  ";
-var DEFAULT_LINE_BREAK = "\n"
+var DEFAULT_LINE_BREAK = "\n";
 
 export class CodeBuilder {
     #buffer = [];
@@ -35,14 +35,15 @@ export class CodeBuilder {
     }
 
     lineBreak(str) {
-        if (str) this.append(str)
+        if (str) this.append(str);
         return this.append(this.#newLineString);
     }
 
     appendLine(str) {
         if (str)
-        for (const line of str.split(/\r?\n/))
-            this.appendIndent().append(line).lineBreak();
+            for (const line of str.split(/\r?\n/))
+                this.appendIndent().append(line).lineBreak();
+        else this.lineBreak();
         return this;
     }
 

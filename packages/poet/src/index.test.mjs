@@ -71,8 +71,8 @@ describe("CodeBuilder", () => {
         var result = cb.toString();
 
         // Arrange ------
-        expect(result).toBe("");
-    })
+        expect(result).toBe("\n");
+    });
 
     test("WHEN: Append empty line", () => {
         // Arrange -------
@@ -84,7 +84,7 @@ describe("CodeBuilder", () => {
 
         // Assert --------
         expect(result).toBe("var foo;\n\nprint(foo);\n");
-    })
+    });
 
     test("WHEN: Append with indent", () => {
         // Arrange ------
@@ -108,12 +108,16 @@ describe("CodeBuilder", () => {
         var cb = new CodeBuilder();
 
         // Act -----------
-        cb.appendLine("{").indent().appendLine('var foo;\nvar bar = 42;').outdent().appendLine('}');
+        cb.appendLine("{")
+            .indent()
+            .appendLine("var foo;\nvar bar = 42;")
+            .outdent()
+            .appendLine("}");
         var result = cb.toString();
 
         // Arrange -------
         expect(result).toBe("{\n  var foo;\n  var bar = 42;\n}\n");
-    })
+    });
 
     test("WHEN: Append parts of line", () => {
         // Arrange -----
@@ -143,7 +147,7 @@ describe("CodeBuilder", () => {
 
         // Assert -------
         expect(result).toBe("hello\n");
-    })
+    });
 
     test("WHEN: override indent string", () => {
         // Arrange -------
@@ -158,13 +162,13 @@ describe("CodeBuilder", () => {
 
     test("WHEN: override line break string", () => {
         // Arrange ---------
-        var cb = new CodeBuilder({ lineBreak: ' -> ' });
+        var cb = new CodeBuilder({ lineBreak: " -> " });
 
         // Act ------------
-        cb.appendLine("foo").appendLine('bar').append('qwe');
+        cb.appendLine("foo").appendLine("bar").append("qwe");
         var result = cb.toString();
 
         // Arrange --------
         expect(result).toBe("foo -> bar -> qwe");
-    })
+    });
 });
